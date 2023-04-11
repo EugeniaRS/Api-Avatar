@@ -15,11 +15,12 @@ class Clase extends Model {}
 Clase.init({
     // definir campos de modelo
     nombre: {
-        type: Dt.STRING(20)
+        type: Dt.STRING(20),
+        allowNull: false
     },
     descripcion: {
         type: Dt.TEXT,
-        allowNull: true
+
     }
 
 }, {

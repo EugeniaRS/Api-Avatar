@@ -19,8 +19,40 @@ class ClassPersonaje {
     static ObtenerPorId(req, res) {
         res.status(200).send('Obtener por Id')
     }
-    static crearClase(req, res) {
-        res.status(201).send('Crear Clase')
+    static async crearClase(req, res) {
+        //  cuandos ea un insert, o update, o traer atributo, tiene que ser igual ala BD el nombre de los atributos
+        try {
+            const { nombre, descripcion } = req.body
+                //   acceder alos campos
+            const results = await Clase.create({
+                    // respetar los nombres delos modelos
+                    // esto es un atajo de javascript es lo mismo, trabjando ocn objetos
+                    nombre,
+                    descripcion: descripcion
+
+                })
+                // throw genera un error
+            if (!results) throw new Error("La clase no ha sido creada", { code: 500 })
+            console.log('Resultados', results)
+            res.status(201).send({
+                // success
+                // me va mandar sucess para indicar el exito del mensaje
+                success: true,
+                message: 'operacion exitosa',
+                results
+            })
+
+        } catch (error) {
+            // controlar errores
+            res.status(error.code || 500).send({
+                success: false,
+                message: error.message,
+            });
+
+        }
+
+
+
     }
     static ActualizarPersonajes(req, res) {
         res.status(200).send('Actualizar clases personajes')
