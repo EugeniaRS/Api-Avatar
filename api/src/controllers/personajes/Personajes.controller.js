@@ -1,9 +1,56 @@
 // import modelo aqui(uso de los modelos de sequelize)
-import { Personaje } from "../../models/index.js"
+import { Arma, Clase, Personaje, PersonajeArma } from "../../models/index.js"
 class Personajes {
 
-    static obtenerPersonajes(req, res) {
-        res.status(200).send('Obtener todos los personajes')
+    static async obtenerPersonajes(req, res) {
+
+
+        try {
+            const results = await Personaje.findAll({
+
+                attributes: [
+                    'nombre',
+                    'biografia',
+                    'imagen'
+                ],
+
+                include: [{
+                        model: Clase,
+                        attributes: [
+                            'id',
+                            'nombre'
+                        ]
+                    },
+
+                    {
+                        model: PersonajeArma,
+                        attributes: ['id'],
+
+                        include: [{
+                            model: Arma,
+                            attributes: [
+                                'nombre'
+                            ]
+
+                        }]
+                    }
+                ]
+            });
+            res.status(200).send({
+                message: 'Obtener todos los personajes',
+                results
+            })
+            console.log(results)
+        } catch (error) {
+            res.status(400).send({
+                    success: false,
+                    message: error
+                }
+
+
+            )
+        }
+
     }
     static obtenerPersonajeEspecifico(req, res) {
             res.status(200).send('Personaje Especifico')
@@ -13,20 +60,33 @@ class Personajes {
         /*   res.status(201).send('crear Personajes') */
         console.log('RESUKTADOS', req.body)
         try {
-            const { nombre, biografia, imagen, idClase } = req.body
-                // campos
+            const { nombre, biografia, imagen, idClase, armas } = req.body
+                // campos mi instancia results
+                // await por que es asincrono
             const results = await Personaje.create({
+                // le mandas los atributos
                 nombre,
                 biografia,
                 imagen,
                 idClase
             })
+
             if (!results) throw new Error("La clase Personaje no ha sido creada", { code: 500 })
+                //  esmi instancia de ese personaje o objeto
+
+            for (const arma of armas) {
+
+                const personajeArma = await PersonajeArma.create({
+                    // asigna un arma
+                    idPersonaje: results.id,
+                    idArma: arma
+                })
+                if (!personajeArma) throw new Error("no se pudo asignar")
+
+            }
 
 
-
-
-
+            console.log("armas", armas)
             res.status(201).send({
                 success: true,
                 message: 'Operacion exitosa',
