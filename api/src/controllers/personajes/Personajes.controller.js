@@ -52,8 +52,66 @@ class Personajes {
         }
 
     }
-    static obtenerPersonajeEspecifico(req, res) {
-            res.status(200).send('Personaje Especifico')
+    static async obtenerPersonajeEspecifico(req, res) {
+
+            try {
+
+                const { id } = req.params
+
+                const results = await Personaje.findOne({
+                    where: {
+                        id
+                    },
+
+                    attributes: [
+                        'id',
+                        'nombre',
+                        'biografia',
+                        'imagen'
+                    ],
+                    include: [{
+                        model: Clase,
+                        attributes: [
+                            'nombre'
+
+                        ]
+                    }],
+                    include: [{
+                        model: PersonajeArma,
+                        include: [{
+                            model: Arma,
+                            attributes: [
+                                'nombre'
+                            ]
+                        }],
+                        attributes: [
+                            'id'
+                        ],
+                        /*   attributes: [
+                              'nombre'
+                          ] */
+
+
+                    }]
+
+
+
+
+
+
+
+                })
+
+
+                res.status(200).send({ success: true, message: 'personaje especifico', results })
+            } catch (error) {
+                res.status(400).send({
+                    success: false,
+                    message: error
+                })
+            }
+
+
         }
         // se crear con la documentacion de sequelize
     static async crearPersonajess(req, res) {
