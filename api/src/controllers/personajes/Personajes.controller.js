@@ -23,16 +23,14 @@ class Personajes {
                     },
 
                     {
-                        model: PersonajeArma,
-                        attributes: ['id'],
 
-                        include: [{
-                            model: Arma,
-                            attributes: [
-                                'nombre'
-                            ]
+                        model: Arma,
+                        attributes: [
+                            'nombre'
+                        ],
+                        through: { attributes: [] }
 
-                        }]
+
                     }
                 ]
             });
@@ -70,29 +68,25 @@ class Personajes {
                         'imagen'
                     ],
                     include: [{
-                        model: Clase,
-                        attributes: [
-                            'nombre'
+                            model: Clase,
+                            attributes: [
 
-                        ]
-                    }],
-                    include: [{
-                        model: PersonajeArma,
-                        include: [{
+                                'nombre'
+
+                            ]
+                        }, {
                             model: Arma,
                             attributes: [
                                 'nombre'
-                            ]
-                        }],
-                        attributes: [
-                            'id'
-                        ],
-                        /*   attributes: [
-                              'nombre'
-                          ] */
+                            ],
+                            through: { attributes: [] }
+                            // es la relacion , atravez de 
+
+                        },
 
 
-                    }]
+
+                    ],
 
 
 

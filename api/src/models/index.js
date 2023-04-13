@@ -28,28 +28,30 @@ Clase.hasMany(Personaje, {
 
 // relacion perosnaje con personajearma
 // pertenece
-PersonajeArma.belongsTo(Personaje, {
-    foreignKey: 'idPersonaje',
-    onDelete: 'CASCADE',
-    onUpdate: 'CASCADE'
-})
-Personaje.hasMany(PersonajeArma, {
-    foreignKey: 'idPersonaje'
+// PersonajeArma.belongsTo(Personaje, {
+//     foreignKey: 'idPersonaje',
+//     onDelete: 'CASCADE',
+//     onUpdate: 'CASCADE'
+// })
+// Personaje.hasMany(PersonajeArma, {
+//     foreignKey: 'idPersonaje'
 
-})
+// })
 
 
-// Relacion Arma con  personajeArma
-PersonajeArma.belongsTo(Arma, {
-    foreignKey: 'idArma',
-    onDelete: 'CASCADE',
-    onUpdate: 'CASCADE'
+// // Relacion Arma con  personajeArma
+// PersonajeArma.belongsTo(Arma, {
+//     foreignKey: 'idArma',
+//     onDelete: 'CASCADE',
+//     onUpdate: 'CASCADE'
 
-})
-Arma.hasMany(PersonajeArma, {
-    foreignKey: 'idArma'
-})
-
+// })
+// Arma.hasMany(PersonajeArma, {
+//     foreignKey: 'idArma'
+// })
+// pertenecce atravez---
+Arma.belongsToMany(Personaje, { through: PersonajeArma, foreignKey: 'idArma' })
+Personaje.belongsToMany(Arma, { through: PersonajeArma, foreignKey: 'idPersonaje' })
 
 
 
