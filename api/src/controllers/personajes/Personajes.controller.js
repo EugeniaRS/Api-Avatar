@@ -50,6 +50,7 @@ class Personajes {
         }
 
     }
+
     static async obtenerPersonajeEspecifico(req, res) {
 
             try {
@@ -57,6 +58,7 @@ class Personajes {
                 const { id } = req.params
 
                 const results = await Personaje.findOne({
+                    //    que significa el wheere
                     where: {
                         id
                     },
@@ -68,25 +70,18 @@ class Personajes {
                         'imagen'
                     ],
                     include: [{
-                            model: Clase,
-                            attributes: [
-
-                                'nombre'
-
-                            ]
-                        }, {
-                            model: Arma,
-                            attributes: [
-                                'nombre'
-                            ],
-                            through: { attributes: [] }
-                            // es la relacion , atravez de 
-
-                        },
-
-
-
-                    ],
+                        model: Clase,
+                        attributes: [
+                            'nombre'
+                        ]
+                    }, {
+                        model: Arma,
+                        attributes: [
+                            'nombre'
+                        ],
+                        through: { attributes: [] }
+                        // es la relacion , atravez de 
+                    }, ],
 
 
 

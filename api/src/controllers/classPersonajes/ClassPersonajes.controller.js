@@ -1,6 +1,6 @@
 // import modelo aqui(uso de los modelos de sequelize)
 //  si se exporta como objeto se importa destructurado
-import { Clase } from "../../models/index.js"
+import { Arma, Clase } from "../../models/index.js"
 
 // metodos de clase
 
@@ -12,12 +12,59 @@ class ClassPersonaje {
     //crear  acciones para dar de alta un personaje
     // static indica que son metodos de clase
 
-    static ObtenerClasesPersonajes(req, res) {
-        res.status(200).send('Obtener clasesPersonajes')
+    static async ObtenerClasesPersonajes(req, res) {
+        // res.status(200).send('Obtener clasesPersonajes')
+        try {
+            const results = await Clase.findAll({
+                attributes: [
+                    'nombre',
+                    'descripcion'
+                ]
+            });
+            res.status(200).send({
+                success: true,
+                message: 'Obtencion de todos los elementos',
+                results
+            })
+        } catch (error) {
+            res.status(400).send({
+                success: false,
+                message: error
+            })
+        }
     }
 
-    static ObtenerPorId(req, res) {
-        res.status(200).send('Obtener por Id')
+    static async ObtenerPorId(req, res) {
+        /*   res.status(200).send('Obtener por Id') */
+        try {
+            const { id } = req.params
+            const results = await Clase.findOne({
+                where: {
+                    id
+                },
+
+                attributes: [
+                    'nombre'
+                ]
+
+            });
+            res.status(200).send({
+                success: true,
+                message: 'Elemento especifico',
+                results
+            })
+
+        } catch (error) {
+            res.status(400).send({
+                success: false,
+                message: error
+            })
+
+        }
+
+
+
+
     }
     static async crearClase(req, res) {
         //  cuandos ea un insert, o update, o traer atributo, tiene que ser igual ala BD el nombre de los atributos
